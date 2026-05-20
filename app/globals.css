@@ -2,26 +2,156 @@
 @tailwind components;
 @tailwind utilities;
 
+/* ─── Design tokens ─────────────────────────────────────────────────────────── */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --color-background:       #050508;
+  --color-foreground:       #f5f0e8;
+  --color-gold:             #c9a84c;
+  --color-gold-light:       #e8c97a;
+  --color-gold-dark:        #9a7a2e;
+  --color-surface:          #0d0d12;
+  --color-surface-elevated: #141420;
+  --color-muted:            #6b6b7a;
+
+  --font-serif: var(--font-playfair), Georgia, serif;
+  --font-sans:  var(--font-inter), system-ui, sans-serif;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+/* ─── Base resets ────────────────────────────────────────────────────────────── */
+@layer base {
+  *, *::before, *::after { box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background-color: var(--color-background);
+    color: var(--color-foreground);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    overflow-x: hidden;
   }
+
+  ::selection {
+    background-color: rgba(201, 168, 76, 0.22);
+    color: var(--color-gold-light);
+  }
+
+  ::-webkit-scrollbar       { width: 3px; }
+  ::-webkit-scrollbar-track { background: var(--color-background); }
+  ::-webkit-scrollbar-thumb { background: var(--color-gold-dark); }
 }
 
-body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+/* ─── Custom cursor ──────────────────────────────────────────────────────────── */
+/*
+ * Applied to <body> by CustomCursor when a fine-pointer device is detected.
+ * Hides the native cursor site-wide so the JS cursor takes over.
+ */
+.cursor-none,
+.cursor-none * {
+  cursor: none !important;
 }
 
+/* ─── Film grain overlay ─────────────────────────────────────────────────────── */
+.grain-overlay {
+  position: fixed;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='grain'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23grain)' opacity='1'/%3E%3C/svg%3E");
+  /* 4% opacity — satisfies hero grain requirement site-wide */
+  opacity: 0.04;
+  pointer-events: none;
+  z-index: 9999;
+  will-change: transform;
+  animation: grain 8s steps(10) infinite;
+}
+
+@keyframes grain {
+  0%,  100% { transform: translate(0,    0); }
+  10%        { transform: translate(-3%,  -8%); }
+  20%        { transform: translate(-8%,   4%); }
+  30%        { transform: translate( 4%, -18%); }
+  40%        { transform: translate(-4%,  18%); }
+  50%        { transform: translate(-10%,  6%); }
+  60%        { transform: translate( 10%,  0%); }
+  70%        { transform: translate(  0%,  10%); }
+  80%        { transform: translate(  2%,  24%); }
+  90%        { transform: translate( -6%,   6%); }
+}
+
+/* ─── Hero floating orbs ─────────────────────────────────────────────────────── */
+/*
+ * Three independent drift cycles with different durations and phase offsets
+ * so the orbs never sync visually.
+ */
+@keyframes orb-float-1 {
+  0%,  100% { transform: translate(  0px,   0px) scale(1.00); }
+  20%        { transform: translate( 38px, -28px) scale(1.04); }
+  45%        { transform: translate(-18px, -52px) scale(0.96); }
+  70%        { transform: translate( 24px,  12px) scale(1.02); }
+}
+
+@keyframes orb-float-2 {
+  0%,  100% { transform: translate(  0px,   0px) scale(1.00); }
+  30%        { transform: translate(-32px,  28px) scale(1.06); }
+  65%        { transform: translate( 20px, -22px) scale(0.93); }
+}
+
+@keyframes orb-float-3 {
+  0%,  100% { transform: translate(  0px,   0px); }
+  35%        { transform: translate( 28px, -24px); }
+  75%        { transform: translate(-22px,  16px); }
+}
+
+/* ─── Hero scroll-indicator pulse ───────────────────────────────────────────── */
+@keyframes scroll-pulse {
+  0%   { transform: scaleY(0); opacity: 1; }
+  55%  { transform: scaleY(1); opacity: 1; }
+  100% { transform: scaleY(1); opacity: 0; }
+}
+
+.scroll-line-fill {
+  animation: scroll-pulse 1.8s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+  transform-origin: top center;
+}
+
+/* ─── Editorial typographic scale ───────────────────────────────────────────── */
 @layer utilities {
-  .text-balance {
-    text-wrap: balance;
+  .text-display-xl {
+    font-size: clamp(4rem, 8vw, 8.5rem);
+    line-height: 0.95;
+    letter-spacing: -0.03em;
+  }
+  .text-display-lg {
+    font-size: clamp(3.5rem, 6vw, 6.5rem);
+    line-height: 1.0;
+    letter-spacing: -0.025em;
+  }
+  .text-display-md {
+    font-size: clamp(2.5rem, 4vw, 4.5rem);
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+  }
+  .text-display-sm {
+    font-size: clamp(2rem, 3vw, 3.5rem);
+    line-height: 1.1;
+    letter-spacing: -0.015em;
+  }
+
+  .font-serif {
+    font-family: var(--font-playfair), Georgia, serif;
+  }
+
+  .gold-rule {
+    display: block;
+    width: 3rem;
+    height: 1px;
+    background-color: var(--color-gold);
+  }
+
+  .vignette {
+    background: radial-gradient(ellipse at center, transparent 35%, rgba(5,5,8,0.85) 100%);
   }
 }
