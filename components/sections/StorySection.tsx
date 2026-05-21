@@ -119,11 +119,44 @@ export function StorySection() {
         const body    = bodyRefs.current[i]
         if (!panel) return
 
+        /* 1 — Entrance: free-running (NOT scrubbed) fires when panel enters viewport */
+        gsap.fromTo(panel,
+          { scale: 0.96, opacity: 0 },
+          {
+            scale: 1, opacity: 1, duration: 0.55, ease: 'power2.out',
+            scrollTrigger: { trigger: panel, start: 'top 85%', toggleActions: 'play none none none' },
+          },
+        )
+
+        /* Text elements — y + fade, play at own speed with stagger */
+        const yEls = ([eyebrow, line1, line2, body] as (HTMLElement | null)[]).filter(Boolean)
+        if (yEls.length) {
+          gsap.fromTo(yEls,
+            { y: 34, opacity: 0 },
+            {
+              y: 0, opacity: 1, duration: 0.65, ease: 'power3.out', stagger: 0.08,
+              scrollTrigger: { trigger: panel, start: 'top 75%', toggleActions: 'play none none none' },
+            },
+          )
+        }
+
+        /* Gold rule — scaleX expand */
+        if (rule) {
+          gsap.fromTo(rule,
+            { scaleX: 0, opacity: 0 },
+            {
+              scaleX: 1, opacity: 1, duration: 0.45, ease: 'power3.out',
+              scrollTrigger: { trigger: panel, start: 'top 73%', toggleActions: 'play none none none' },
+            },
+          )
+        }
+
+        /* 2 — Pin: parallax background + exit fade (scrubbed) */
         const tl = gsap.timeline({
           scrollTrigger: {
             trigger: panel,
             start: 'top top',
-            end: '+=100%',
+            end: '+=80%',
             pin: true,
             scrub: 0.5,
             anticipatePin: 1,
@@ -131,14 +164,6 @@ export function StorySection() {
           },
         })
 
-        /* 1 — Panel entrance: scale 0.94→1 + fade in (t=0→0.35) */
-        tl.fromTo(panel,
-          { scale: 0.94, opacity: 0 },
-          { scale: 1,    opacity: 1, duration: 0.35, ease: 'none' },
-          0,
-        )
-
-        /* 2 — Parallax background (t=0→2, subtler travel range) */
         if (bg) {
           tl.fromTo(bg,
             { y: '-10%' },
@@ -147,14 +172,7 @@ export function StorySection() {
           )
         }
 
-        /* 3 — Text stagger entrances — compressed, smaller y values */
-        if (eyebrow) tl.fromTo(eyebrow, { y: 26, opacity: 0 }, { y: 0, opacity: 1, duration: 0.30, ease: 'none' }, 0.03)
-        if (rule)    tl.fromTo(rule,    { scaleX: 0, opacity: 0 }, { scaleX: 1, opacity: 1, duration: 0.24, ease: 'none' }, 0.08)
-        if (line1)   tl.fromTo(line1,   { y: 52, opacity: 0 }, { y: 0, opacity: 1, duration: 0.34, ease: 'none' }, 0.12)
-        if (line2)   tl.fromTo(line2,   { y: 52, opacity: 0 }, { y: 0, opacity: 1, duration: 0.34, ease: 'none' }, 0.19)
-        if (body)    tl.fromTo(body,    { y: 22, opacity: 0 }, { y: 0, opacity: 1, duration: 0.28, ease: 'none' }, 0.26)
-
-        /* 4 — Panel exit: fade out (t=1.5→2.0) */
+        /* Panel exit: fade out (t=1.5→2.0) */
         tl.to(panel, { opacity: 0, duration: 0.5, ease: 'none' }, 1.5)
       })
 
