@@ -121,10 +121,10 @@ export function StorySection() {
 
         /* 1 — Entrance: free-running (NOT scrubbed) fires when panel enters viewport */
         gsap.fromTo(panel,
-          { scale: 0.96, opacity: 0 },
+          { scale: 0.97, opacity: 0 },
           {
-            scale: 1, opacity: 1, duration: 0.55, ease: 'power2.out',
-            scrollTrigger: { trigger: panel, start: 'top 85%', toggleActions: 'play none none none' },
+            scale: 1, opacity: 1, duration: 0.4, ease: 'power2.out',
+            scrollTrigger: { trigger: panel, start: 'top 92%', toggleActions: 'play none none none' },
           },
         )
 
@@ -132,10 +132,10 @@ export function StorySection() {
         const yEls = ([eyebrow, line1, line2, body] as (HTMLElement | null)[]).filter(Boolean)
         if (yEls.length) {
           gsap.fromTo(yEls,
-            { y: 34, opacity: 0 },
+            { y: 24, opacity: 0 },
             {
-              y: 0, opacity: 1, duration: 0.65, ease: 'power3.out', stagger: 0.08,
-              scrollTrigger: { trigger: panel, start: 'top 75%', toggleActions: 'play none none none' },
+              y: 0, opacity: 1, duration: 0.45, ease: 'power3.out', stagger: 0.055,
+              scrollTrigger: { trigger: panel, start: 'top 88%', toggleActions: 'play none none none' },
             },
           )
         }
@@ -145,8 +145,8 @@ export function StorySection() {
           gsap.fromTo(rule,
             { scaleX: 0, opacity: 0 },
             {
-              scaleX: 1, opacity: 1, duration: 0.45, ease: 'power3.out',
-              scrollTrigger: { trigger: panel, start: 'top 73%', toggleActions: 'play none none none' },
+              scaleX: 1, opacity: 1, duration: 0.35, ease: 'power3.out',
+              scrollTrigger: { trigger: panel, start: 'top 86%', toggleActions: 'play none none none' },
             },
           )
         }
@@ -156,7 +156,7 @@ export function StorySection() {
           scrollTrigger: {
             trigger: panel,
             start: 'top top',
-            end: '+=80%',
+            end: '+=45%',
             pin: true,
             scrub: 0.5,
             anticipatePin: 1,
