@@ -123,39 +123,39 @@ export function StorySection() {
           scrollTrigger: {
             trigger: panel,
             start: 'top top',
-            end: '+=160%',
+            end: '+=100%',
             pin: true,
-            scrub: 1,
+            scrub: 0.5,
             anticipatePin: 1,
             invalidateOnRefresh: true,
           },
         })
 
-        /* 1 — Panel entrance: scale 0.94→1 + fade in (t=0→0.65) */
+        /* 1 — Panel entrance: scale 0.94→1 + fade in (t=0→0.35) */
         tl.fromTo(panel,
           { scale: 0.94, opacity: 0 },
-          { scale: 1,    opacity: 1, duration: 0.65, ease: 'none' },
+          { scale: 1,    opacity: 1, duration: 0.35, ease: 'none' },
           0,
         )
 
-        /* 2 — Parallax background travels full timeline (t=0→3) */
+        /* 2 — Parallax background (t=0→2, subtler travel range) */
         if (bg) {
           tl.fromTo(bg,
-            { y: '-14%' },
-            { y: '14%', duration: 3, ease: 'none' },
+            { y: '-10%' },
+            { y: '10%', duration: 2, ease: 'none' },
             0,
           )
         }
 
-        /* 3 — Text stagger entrances */
-        if (eyebrow) tl.fromTo(eyebrow, { y: 42, opacity: 0 }, { y: 0, opacity: 1, duration: 0.52, ease: 'none' }, 0.06)
-        if (rule)    tl.fromTo(rule,    { scaleX: 0, opacity: 0 }, { scaleX: 1, opacity: 1, duration: 0.4, ease: 'none' }, 0.13)
-        if (line1)   tl.fromTo(line1,   { y: 85, opacity: 0 }, { y: 0, opacity: 1, duration: 0.58, ease: 'none' }, 0.18)
-        if (line2)   tl.fromTo(line2,   { y: 85, opacity: 0 }, { y: 0, opacity: 1, duration: 0.58, ease: 'none' }, 0.27)
-        if (body)    tl.fromTo(body,    { y: 38, opacity: 0 }, { y: 0, opacity: 1, duration: 0.5, ease: 'none' }, 0.36)
+        /* 3 — Text stagger entrances — compressed, smaller y values */
+        if (eyebrow) tl.fromTo(eyebrow, { y: 26, opacity: 0 }, { y: 0, opacity: 1, duration: 0.30, ease: 'none' }, 0.03)
+        if (rule)    tl.fromTo(rule,    { scaleX: 0, opacity: 0 }, { scaleX: 1, opacity: 1, duration: 0.24, ease: 'none' }, 0.08)
+        if (line1)   tl.fromTo(line1,   { y: 52, opacity: 0 }, { y: 0, opacity: 1, duration: 0.34, ease: 'none' }, 0.12)
+        if (line2)   tl.fromTo(line2,   { y: 52, opacity: 0 }, { y: 0, opacity: 1, duration: 0.34, ease: 'none' }, 0.19)
+        if (body)    tl.fromTo(body,    { y: 22, opacity: 0 }, { y: 0, opacity: 1, duration: 0.28, ease: 'none' }, 0.26)
 
-        /* 4 — Panel exit: fade out (t=2.4→3.0) */
-        tl.to(panel, { opacity: 0, duration: 0.6, ease: 'none' }, 2.4)
+        /* 4 — Panel exit: fade out (t=1.5→2.0) */
+        tl.to(panel, { opacity: 0, duration: 0.5, ease: 'none' }, 1.5)
       })
 
       /* ── Marquee infinite scroll ── */
